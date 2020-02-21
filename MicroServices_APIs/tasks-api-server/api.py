@@ -68,18 +68,30 @@ def profile(post_id):
 @app.route("/users", methods=["POST"])
 def add_user():
     new_user = request.get_json()
-    if True: #All
-        #user id true
-        #user role true
-        #new user TRUE
+    myDict = {}
+    if 'first' in new_user.keys():
+        myDict['first'] = new_user['first']
+        myDict['last'] = new_user['last']
+        myDict['email'] = new_user['email']
         
-        #append
-        response = jsonify(new_user)
-        response.status_code = 201
-        id_counter +=1
+        #user role true
+        #myDict['role'] = new_user['role']
+        #myDict['status'] = new_user['status']
+        
+        #print('/n/n/n This is Running /n/n/n')
+        
+        #new user TRUE
+        myDict['id'] = len(USERS)      
+        
+        #response
+        USERS.append(myDict)
+        response = Response(None, 201)
+        
+        return response
+        
     else:
         response = Response(None, 422)
-    return response
+        return response
     
 # Problem 4
 
