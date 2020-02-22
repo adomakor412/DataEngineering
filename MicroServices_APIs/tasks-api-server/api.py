@@ -94,5 +94,24 @@ def add_user():
         return response
     
 # Problem 4
+@app.route("/users/<id>", methods=["PUT"])
+def update_user():
+    user = request.get_json()
+    post_id = user['id']
+    print(user)
+    for dictionary in USERS:      
+        if post_id == dictionary['id']:
+            dictionary['first'] = user['first']
+            dictionary['last'] = user['last']
+            dictionary['email'] = user['email']
+            dictionary['role'] = user['role']
+            dictionary['active'] = user['active']
 
+            #response
+            response = Response(None, 200)
+            return response
+        
+    response = Response(None, 404)
+    return response
+    
 # Problem 5
