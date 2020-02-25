@@ -78,8 +78,6 @@ def add_user():
         #myDict['role'] = new_user['role']
         #myDict['status'] = new_user['status']
         
-        #print('/n/n/n This is Running /n/n/n')
-        
         #new user TRUE
         myDict['id'] = len(USERS)      
         
@@ -94,24 +92,26 @@ def add_user():
         return response
     
 # Problem 4
-@app.route("/users/<id>", methods=["PUT"])
-def update_user():
-    user = request.get_json()
-    post_id = user['id']
-    print(user)
+@app.route("/users/<int:post_id>", methods=["PUT","PATCH"])
+def update_user(post_id):  
     for dictionary in USERS:      
         if post_id == dictionary['id']:
+            user = request.get_json()
             dictionary['first'] = user['first']
-            dictionary['last'] = user['last']
-            dictionary['email'] = user['email']
-            dictionary['role'] = user['role']
-            dictionary['active'] = user['active']
-
-            #response
             response = Response(None, 200)
-            return response
+            return jsonify(dictionary)
         
     response = Response(None, 404)
     return response
     
 # Problem 5
+
+@app.route("/users/<int:post_id>/deactivate", methods=["POST"])
+def deactivate_user(post_id): 
+    for dictionary in USERS:    
+        if post_id == dictionary['id']:
+            dictionary['active']=False
+            response = Response(None, 200)
+            return jsonify(dictionary)
+    response = Response(None, 404)
+    return response
