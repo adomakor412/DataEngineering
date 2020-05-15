@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@abandonware/noble": "^1.9.2-8",
+    "mqtt": "^4.0.1",
     "node-thunderboard-react": "github:Andrii0/node-thunderboard-react"
   },
   "devDependencies": {},
