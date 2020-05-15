@@ -1,15 +1,23 @@
 var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt://broker.mqttdashboard.com')
+var client  = mqtt.connect('mqtt://broker.hivemq.com')
  
 console.log('Go to http://www.hivemq.com/demos/websocket-client/');
 console.log('Subscribe to sensor/adomakor412');
 
-client.on('connect', function () {
-      console.log('Hello mqtt')
-})
-
 var ThunderboardReact = require('node-thunderboard-react');
 var thunder = new ThunderboardReact();
+let count = 0;
+client.on('connect', _ => {
+    console.log(`Connected to MQTT Mosquitto`)
+    // const publish = setInterval(() => {
+    //     ++count;
+    //     client.publish('testchannel/test', JSON.stringify({name: 'santosh', lastname: 'suwal', count}))
+    //     // if (count >= 10) {
+    //     //     clearInterval(publish);
+    //     //     process.exit(0);
+    //     // }
+    // }, 5000);
+})
 
 // Initialize the ThunderboardReact object
 thunder.init((error) => {
@@ -40,7 +48,12 @@ thunder.init((error) => {
 function getEnvironmentalSensing(device) {
   device.getEnvironmentalSensing((error, res) => {
     // Show the data
-    console.log(`- Date: ${new Date()}`);
+    client.publish('sensor/adomakor412', JSON.stringify({
+        ...res,
+        latitude: '40.864946',
+        longitude: '-73.9249753'
+    }))
+    console.log(`- Date: ${new Date()}`)
     console.log('- Sensored data:');
     console.log('  - Humidity    : ' + res.humidity + ' %');
     console.log('  - Temperature : ' + res.temperature + ' °C');
@@ -48,14 +61,5 @@ function getEnvironmentalSensing(device) {
     console.log('  - Pressure    : ' + res.pressure + ' mbar');
     console.log('  - Light       : ' + res.light + ' lx');
     console.log('  - Sound       : ' + res.sound + ' dB');
-    client.publish('sensor/adomakor412',JSON.stringify({...res,
-	longitude: '40.864946', latitude: '-73.9249753'}
-	))
-    // Disconnect the device
-    // device.disconnect(() => {
-    //   console.log('- Disconnected ' + device.localName);
-    //   process.exit();
-    // });
   });
 }
-
