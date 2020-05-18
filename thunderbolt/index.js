@@ -1,13 +1,13 @@
 var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt://broker.hivemq.com')
- 
-console.log('Go to http://www.hivemq.com/demos/websocket-client/');
-console.log('Subscribe to sensor/adomakor412');
+var client  = mqtt.connect('mqtt://mqtt.eclipse.org')
 
 var ThunderboardReact = require('node-thunderboard-react');
 var thunder = new ThunderboardReact();
 let count = 0;
 client.on('connect', _ => {
+    client.subscribe('dsei2400/santosh',data => {
+	console.log(data)
+})
     console.log(`Connected to MQTT Mosquitto`)
     // const publish = setInterval(() => {
     //     ++count;
@@ -48,7 +48,7 @@ thunder.init((error) => {
 function getEnvironmentalSensing(device) {
   device.getEnvironmentalSensing((error, res) => {
     // Show the data
-    client.publish('sensor/adomakor412', JSON.stringify({
+    client.publish('dsei2400/adomakor412', JSON.stringify({
         ...res,
         latitude: '40.864946',
         longitude: '-73.9249753'
