@@ -4,11 +4,18 @@ var client  = mqtt.connect('mqtt://mqtt.eclipse.org')
 var ThunderboardReact = require('node-thunderboard-react');
 var thunder = new ThunderboardReact();
 let count = 0;
-client.on('connect', _ => {
-    client.subscribe('dsei2400/santosh',data => {
-	console.log(data)
+client.on('connect', () => {
+    client.subscribe('dsei2400/santosh')
 })
-    console.log(`Connected to MQTT Mosquitto`)
+
+client.on('message',(topic,message)=>{
+	if (topic==='dsei2400/santosh'){
+		console.log(message.toString() )
+	}
+})
+
+//')
+  //  console.log(`Connected to MQTT Mosquitto`)
     // const publish = setInterval(() => {
     //     ++count;
     //     client.publish('testchannel/test', JSON.stringify({name: 'santosh', lastname: 'suwal', count}))
@@ -17,7 +24,7 @@ client.on('connect', _ => {
     //     //     process.exit(0);
     //     // }
     // }, 5000);
-})
+//})
 
 // Initialize the ThunderboardReact object
 thunder.init((error) => {
@@ -53,7 +60,9 @@ function getEnvironmentalSensing(device) {
         latitude: '40.864946',
         longitude: '-73.9249753'
     }))
+    
     console.log(`- Date: ${new Date()}`)
+    console.log('Longitude: -73.9249753, Latitude: 40.864946');
     console.log('- Sensored data:');
     console.log('  - Humidity    : ' + res.humidity + ' %');
     console.log('  - Temperature : ' + res.temperature + ' °C');
